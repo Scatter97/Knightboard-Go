@@ -29,13 +29,13 @@ private data class FeatureItem(
 private val features = listOf(
     FeatureItem(
         title = "Record OTB Game",
-        description = "Open the rear camera, align the board, and begin calibration.",
+        description = "Open the rear camera, align the board, and calibrate its 64 squares.",
         available = true,
     ),
     FeatureItem(
-        title = "Game History",
-        description = "Saved PGNs and review tools arrive in a later milestone.",
-        available = false,
+        title = "Virtual Board",
+        description = "Play or correct a position manually while the camera detection engine is being built.",
+        available = true,
     ),
     FeatureItem(
         title = "64-Square Detection V2",
@@ -48,11 +48,12 @@ private val features = listOf(
 @Composable
 fun HomeScreen(
     onStartGame: () -> Unit,
+    onOpenVirtualBoard: () -> Unit,
     onOpenSettings: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Chess Camera PGN") })
+            TopAppBar(title = { Text("Knightboard Go") })
         },
     ) { innerPadding ->
         LazyColumn(
@@ -64,18 +65,22 @@ fun HomeScreen(
         ) {
             item {
                 Text(
-                    text = "Android foundation build",
+                    text = "Your chessboard, connected.",
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Text(
-                    text = "Camera preview and touch calibration are ready for first-device testing.",
+                    text = "Record over-the-board games with a calibrated camera, or use the virtual board while detection is in development.",
                     modifier = Modifier.padding(top = 6.dp, bottom = 8.dp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
             items(features) { feature ->
-                FeatureCard(feature = feature, onStartGame = onStartGame)
+                FeatureCard(
+                    feature = feature,
+                    onStartGame = onStartGame,
+                    onOpenVirtualBoard = onOpenVirtualBoard,
+                )
             }
 
             item {
@@ -96,6 +101,7 @@ fun HomeScreen(
 private fun FeatureCard(
     feature: FeatureItem,
     onStartGame: () -> Unit,
+    onOpenVirtualBoard: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -113,8 +119,13 @@ private fun FeatureCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             if (feature.available) {
-                Button(onClick = onStartGame) {
-                    Text("Open camera")
+                Button(
+                    onClick = when (feature.title) {
+                        "Record OTB Game" -> onStartGame
+                        else -> onOpenVirtualBoard
+                    },
+                ) {
+                    Text(if (feature.title == "Record OTB Game") "Open camera" else "Open board")
                 }
             } else {
                 Text(
