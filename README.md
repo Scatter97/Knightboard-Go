@@ -1,23 +1,25 @@
-# Chess Camera PGN Mobile
+# Knightboard Go
 
-Native Android version of Chess Camera PGN.
+Knightboard Go is the native Android companion for recording and reviewing over-the-board chess.
 
-## Foundation build: 0.1.0-alpha01
+## First playable foundation: 0.2.0-alpha01
 
 The first milestone provides a real Android application foundation rather than a desktop-code wrapper:
 
 - Kotlin and Jetpack Compose application
-- Material 3 home screen and navigation
+- Knightboard Go branding and Material 3 navigation
 - Android camera permission flow
 - Live rear-camera preview using CameraX
 - 8×8 alignment guide
 - Touch-based four-corner board calibration
 - Perspective-style grid preview across the selected quadrilateral
 - Persistent Local64 V2, diagnostics, and detection-mode settings using DataStore
+- Playable virtual chessboard with turn-aware manual moves
+- Move list and reset control for manual position correction
 - Unit tests for calibration state and grid interpolation
 - GitHub Actions lint, tests, and debug APK build
 
-The app does **not** detect chess moves yet. Local64 V2, ONNX piece recognition, PGN recording, clocks, correction, and multi-move recovery are subsequent milestones.
+The app does **not** detect chess moves from the camera yet. Local64 V2, ONNX piece recognition, PGN recording, clocks, correction, and multi-move recovery are subsequent milestones. The virtual board is included now so the same game flow can later accept manual corrections and detected moves.
 
 ## Build locally
 
@@ -48,6 +50,10 @@ app/build/outputs/apk/debug/app-debug.apk
 5. Choose **Calibrate board**.
 6. Tap top-left, top-right, bottom-right, then bottom-left.
 7. Confirm the generated 8×8 grid follows the playing squares.
+
+## Branding
+
+`Knightboard-Go` is the permanent repository and code name. The Android display name is currently **Knightboard Go** and can be changed later without changing the application ID or affecting existing installations.
 
 ## Privacy
 
