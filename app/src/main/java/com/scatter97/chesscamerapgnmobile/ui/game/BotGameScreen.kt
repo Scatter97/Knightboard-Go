@@ -140,7 +140,7 @@ fun BotGameScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun PromotionPicker(onChoice: (PieceType) -> Unit) {
+fun PromotionPicker(onChoice: (PieceType) -> Unit) {
     AlertDialog(
         onDismissRequest = {},
         title = { Text("Choose promotion") },
