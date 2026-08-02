@@ -46,7 +46,6 @@ private val features = listOf(
     FeatureItem(
         title = "64-Square Detection V2",
         description = "The Android detection engine is the next major implementation phase.",
-        available = false,
     ),
 )
 
