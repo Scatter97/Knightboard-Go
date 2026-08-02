@@ -13,14 +13,13 @@ Compose UI
    └── Persistent settings
           │
           ▼
-Future game-session state machine
+Chess-core full rules engine
           │
-          ├── CameraX ImageAnalysis
-          ├── OpenCV board warp
+          ├── Virtual Board
+          ├── Stockfish Lite bot game
+          ├── Future CameraX ImageAnalysis
           ├── Local64 Detection V2
-          ├── ONNX piece recognition
-          ├── Legal move resolver
-          └── Multi-move recovery
+          └── Camera move resolver
 ```
 
 ## Current packages
@@ -30,6 +29,7 @@ Future game-session state machine
 - `ui.calibration` — four-point calibration interaction and grid preview
 - `ui.settings` — persistent detection preferences
 - `domain.calibration` — platform-independent calibration state and interpolation
+- `domain.game` — full chess session wrapper and Stockfish adapter
 - `data.settings` — Preferences DataStore repository
 
 ## State rules

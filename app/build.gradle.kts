@@ -15,7 +15,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "0.2.0-alpha01"
+        versionName = "0.3.0-alpha01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -71,6 +71,8 @@ dependencies {
     implementation(libs.androidx.camera.view)
 
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.chess.core)
+    implementation(libs.stockfish.multiplatform.lite)
 
     testImplementation(libs.junit)
 

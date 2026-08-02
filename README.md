@@ -2,7 +2,7 @@
 
 Knightboard Go is the native Android companion for recording and reviewing over-the-board chess.
 
-## First playable foundation: 0.2.0-alpha01
+## Bot-game foundation: 0.3.0-alpha01
 
 The first milestone provides a real Android application foundation rather than a desktop-code wrapper:
 
@@ -16,10 +16,12 @@ The first milestone provides a real Android application foundation rather than a
 - Persistent Local64 V2, diagnostics, and detection-mode settings using DataStore
 - Playable virtual chessboard with turn-aware manual moves
 - Move list and reset control for manual position correction
+- Full legal chess rules: check, mate, stalemate, castling, en passant, promotions, repetitions, 50-move draws, FEN, and PGN
+- Bot Game mode against on-device Stockfish Lite
 - Unit tests for calibration state and grid interpolation
 - GitHub Actions lint, tests, and debug APK build
 
-The app does **not** detect chess moves from the camera yet. Local64 V2, ONNX piece recognition, PGN recording, clocks, correction, and multi-move recovery are subsequent milestones. The virtual board is included now so the same game flow can later accept manual corrections and detected moves.
+Camera move detection is temporarily disabled while it is rebuilt. The camera and calibration implementation remains in the project, but the app currently focuses on Bot Game and Virtual Board play. Local64 V2, ONNX piece recognition, PGN recording, clocks, correction, and multi-move recovery return in a later milestone.
 
 ## Build locally
 
@@ -58,6 +60,10 @@ app/build/outputs/apk/debug/app-debug.apk
 ## Privacy
 
 The foundation build displays the camera preview but does not upload or save camera frames.
+
+## Third-party software
+
+The Bot Game uses on-device Stockfish Lite. See [third-party notices](THIRD_PARTY_NOTICES.md) for source and licence information.
 
 ## Documentation
 
