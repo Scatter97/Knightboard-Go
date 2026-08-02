@@ -40,7 +40,7 @@ fun VirtualBoardScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Virtual Board") },
+                title = { Text("Play on Virtual Board") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("Back") } },
             )
         },
@@ -50,16 +50,14 @@ fun VirtualBoardScreen(onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             revision
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text("${session.sideToMove().name.lowercase().replaceFirstChar { it.uppercase() }} to move", style = MaterialTheme.typography.titleMedium)
-                    Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            }
+            Text("${session.sideToMove().name.lowercase().replaceFirstChar { it.uppercase() }} to move", style = MaterialTheme.typography.titleLarge)
+            Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            MoveRow(session.moves())
             KnightboardChessBoard(
                 session = session,
                 selected = selected,
                 enabled = !session.isOver(),
+                lastMove = session.moves().lastOrNull(),
                 onSquarePressed = { square ->
                     val source = selected
                     if (source == null) {
@@ -91,7 +89,6 @@ fun VirtualBoardScreen(onBack: () -> Unit) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            MoveRow(session.moves())
             Button(
                 onClick = {
                     session = ChessSession()

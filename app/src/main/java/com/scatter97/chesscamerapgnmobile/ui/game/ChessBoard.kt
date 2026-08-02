@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,37 +28,58 @@ import com.scatter97.chesscamerapgnmobile.ui.theme.Amber
 
 private val LightSquare = Color(0xFFE7D7B6)
 private val DarkSquare = Color(0xFF8A684B)
-private val LegalMove = Color(0xB85DE69A)
+private val LegalMove = Color(0xAA42643D)
+private val LastMove = Color(0xFFB8CE50)
 
 @Composable
 fun KnightboardChessBoard(
     session: ChessSession,
     selected: String?,
     enabled: Boolean,
+    lastMove: String? = null,
     onSquarePressed: (String) -> Unit,
 ) {
     val legalDestinations = selected?.let(session::legalDestinations).orEmpty()
+    val lastMoveSquares = lastMove
+        ?.takeIf { it.length >= 4 }
+        ?.let { setOf(it.substring(0, 2), it.substring(2, 4)) }
+        .orEmpty()
     Column(modifier = Modifier.fillMaxWidth().aspectRatio(1f)) {
         for (rank in 8 downTo 1) {
             Row(modifier = Modifier.weight(1f)) {
                 for (file in 'a'..'h') {
                     val square = "$file$rank"
                     val isLight = ((file.code - 'a'.code) + rank) % 2 == 1
+                    val isLastMoveSquare = square in lastMoveSquares
+                    val isLegalDestination = square in legalDestinations
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxSize()
-                            .background(if (isLight) LightSquare else DarkSquare)
+                            .background(
+                                if (isLastMoveSquare) LastMove.copy(alpha = 0.72f)
+                                else if (isLight) LightSquare else DarkSquare,
+                            )
                             .then(
                                 when {
                                     selected == square -> Modifier.border(3.dp, Amber)
-                                    square in legalDestinations -> Modifier.border(3.dp, LegalMove)
                                     else -> Modifier
                                 },
                             )
                             .then(if (enabled) Modifier.clickable { onSquarePressed(square) } else Modifier),
                         contentAlignment = Alignment.Center,
                     ) {
+                        if (isLegalDestination) {
+                            Box(
+                                modifier = Modifier
+                                    .size(if (session.pieceAt(square) == null) 18.dp else 48.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        if (session.pieceAt(square) == null) LegalMove
+                                        else LegalMove.copy(alpha = 0.45f),
+                                ),
+                            )
+                        }
                         session.pieceAt(square)?.let { piece ->
                             Text(
                                 text = piece.symbol(),
