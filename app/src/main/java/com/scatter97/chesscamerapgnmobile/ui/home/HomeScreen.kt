@@ -23,19 +23,25 @@ import androidx.compose.ui.unit.dp
 private data class FeatureItem(
     val title: String,
     val description: String,
-    val available: Boolean,
+    val action: FeatureAction? = null,
 )
+
+private enum class FeatureAction { BotGame, VirtualBoard }
 
 private val features = listOf(
     FeatureItem(
         title = "Record OTB Game",
-        description = "Open the rear camera, align the board, and calibrate its 64 squares.",
-        available = true,
+        description = "Temporarily disabled while the mobile camera move-detection system is rebuilt.",
     ),
     FeatureItem(
         title = "Virtual Board",
-        description = "Play or correct a position manually while the camera detection engine is being built.",
-        available = true,
+        description = "Play a complete local game with full rule validation.",
+        action = FeatureAction.VirtualBoard,
+    ),
+    FeatureItem(
+        title = "Bot Game",
+        description = "Play as White against on-device Stockfish.",
+        action = FeatureAction.BotGame,
     ),
     FeatureItem(
         title = "64-Square Detection V2",
@@ -49,6 +55,7 @@ private val features = listOf(
 fun HomeScreen(
     onStartGame: () -> Unit,
     onOpenVirtualBoard: () -> Unit,
+    onOpenBotGame: () -> Unit,
     onOpenSettings: () -> Unit,
 ) {
     Scaffold(
@@ -69,7 +76,7 @@ fun HomeScreen(
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Text(
-                    text = "Record over-the-board games with a calibrated camera, or use the virtual board while detection is in development.",
+                    text = "Play against Stockfish or use the virtual board while camera move detection is being rebuilt.",
                     modifier = Modifier.padding(top = 6.dp, bottom = 8.dp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -80,6 +87,7 @@ fun HomeScreen(
                     feature = feature,
                     onStartGame = onStartGame,
                     onOpenVirtualBoard = onOpenVirtualBoard,
+                    onOpenBotGame = onOpenBotGame,
                 )
             }
 
@@ -102,6 +110,7 @@ private fun FeatureCard(
     feature: FeatureItem,
     onStartGame: () -> Unit,
     onOpenVirtualBoard: () -> Unit,
+    onOpenBotGame: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -118,18 +127,19 @@ private fun FeatureCard(
                 feature.description,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            if (feature.available) {
+            if (feature.action != null) {
                 Button(
-                    onClick = when (feature.title) {
-                        "Record OTB Game" -> onStartGame
-                        else -> onOpenVirtualBoard
+                    onClick = when (feature.action) {
+                        FeatureAction.BotGame -> onOpenBotGame
+                        FeatureAction.VirtualBoard -> onOpenVirtualBoard
+                        null -> onStartGame
                     },
                 ) {
-                    Text(if (feature.title == "Record OTB Game") "Open camera" else "Open board")
+                    Text(if (feature.action == FeatureAction.BotGame) "Play Stockfish" else "Open board")
                 }
             } else {
                 Text(
-                    text = "Planned",
+                    text = "Temporarily disabled",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
