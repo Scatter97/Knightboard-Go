@@ -29,6 +29,7 @@ import com.scatter97.chesscamerapgnmobile.domain.game.StockfishBot
 import io.github.alluhemanth.chess.core.piece.PieceColor
 import io.github.alluhemanth.chess.core.piece.PieceType
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,14 +50,17 @@ fun BotGameScreen(onBack: () -> Unit) {
         botThinking = true
         status = "Stockfish is thinking…"
         scope.launch {
-            runCatching { StockfishBot.chooseMove(session.fen()) }
-                .onSuccess { move ->
-                    if (session.applyUci(move)) {
-                        revision++
-                        status = if (session.isOver()) session.resultLabel() else "Stockfish played $move. Your move."
-                    } else status = "Stockfish returned an invalid move. Try a new game."
-                }
-                .onFailure { error -> status = "Stockfish could not start: ${error.message ?: "unknown error"}" }
+            try {
+                val move = StockfishBot.chooseMove(session.fen())
+                // Keep the move visible long enough for the player to follow the game.
+                delay(900)
+                if (session.applyUci(move)) {
+                    revision++
+                    status = if (session.isOver()) session.resultLabel() else "Stockfish played $move. Your move."
+                } else status = "Stockfish returned an invalid move. Try a new game."
+            } catch (error: Throwable) {
+                status = "Stockfish could not start: ${error.message ?: "unknown error"}"
+            }
             botThinking = false
         }
     }
@@ -79,7 +83,7 @@ fun BotGameScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Bot Game") },
+                title = { Text("Play against Stockfish") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("Back") } },
             )
         },
@@ -89,16 +93,14 @@ fun BotGameScreen(onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             revision
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(if (botThinking) "Stockfish • thinking" else "You • White", style = MaterialTheme.typography.titleMedium)
-                    Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            }
+            Text("Stockfish • Level 5", style = MaterialTheme.typography.titleLarge)
+            Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            MoveRow(session.moves())
             KnightboardChessBoard(
                 session = session,
                 selected = selected,
                 enabled = !botThinking && !session.isOver() && session.sideToMove() == PieceColor.WHITE,
+                lastMove = session.moves().lastOrNull(),
                 onSquarePressed = { square ->
                     val source = selected
                     if (source == null) {
@@ -117,7 +119,6 @@ fun BotGameScreen(onBack: () -> Unit) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            MoveRow(session.moves())
             Button(
                 onClick = {
                     session = ChessSession()
