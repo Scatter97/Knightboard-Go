@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Chess-Camera-PGN-Mobile"
+rootProject.name = "Knightboard-Go"
 include(":app")

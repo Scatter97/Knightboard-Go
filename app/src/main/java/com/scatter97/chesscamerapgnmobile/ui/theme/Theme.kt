@@ -27,7 +27,7 @@ private val LightColors = lightColorScheme(
 )
 
 @Composable
-fun ChessCameraTheme(
+fun KnightboardGoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {

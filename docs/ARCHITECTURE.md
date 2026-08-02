@@ -1,4 +1,4 @@
-# Android architecture
+# Knightboard Go Android architecture
 
 ## Foundation
 

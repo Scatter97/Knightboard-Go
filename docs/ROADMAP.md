@@ -1,5 +1,7 @@
 # Mobile roadmap
 
+The repository and internal code name are **Knightboard-Go**. The Android package ID remains stable so future public-name changes do not interrupt updates for existing users.
+
 ## Phase 1 — foundation
 
 - [x] Compose app shell
@@ -10,6 +12,7 @@
 - [x] 8×8 calibration grid preview
 - [x] Persistent detection settings
 - [x] Android CI and debug APK
+- [x] Knightboard Go branding
 
 ## Phase 2 — image pipeline
 
@@ -22,8 +25,8 @@
 
 ## Phase 3 — chess recording
 
-- [ ] Chess rules and legal-move model
-- [ ] Virtual board
+- [x] Turn-aware manual move model
+- [x] Virtual board
 - [ ] Player and event setup
 - [ ] Built-in clock
 - [ ] PGN and FEN generation
