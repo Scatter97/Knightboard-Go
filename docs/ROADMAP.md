@@ -25,8 +25,10 @@ The repository and internal code name are **Knightboard-Go**. The Android packag
 
 ## Phase 3 — chess recording
 
-- [x] Turn-aware manual move model
+- [x] Full legal-move engine (including special moves and standard draw rules)
 - [x] Virtual board
+- [x] On-device Stockfish bot game
+- [ ] Re-enable OTB camera game once the detection pipeline is ready
 - [ ] Player and event setup
 - [ ] Built-in clock
 - [ ] PGN and FEN generation
